@@ -49,3 +49,14 @@ class APIDriveDocMixin(object):
         url = self._gen_request_url('/open-apis/doc/v2/meta/{}'.format(doc_token))
         res = self._get(url, auth_token=user_access_token)
         return make_datatype(DriveDocFileMeta, res['data'])
+
+    def create_drive_doc(self, user_access_token, folder_token, content=None):
+        url = "	https://open.feishu.cn/open-apis/doc/v2/create"
+        body = {
+            'FolderToken': folder_token,
+        }
+        if content:
+            body["Content"] = content
+        res = self._post(url, body=body, auth_token=user_access_token)
+        print(res)
+        # return make_datatype(DriveCreateFile, res['data'])

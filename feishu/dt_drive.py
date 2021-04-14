@@ -191,6 +191,20 @@ class DriveSheetMeta(object):
 
 @to_json_decorator
 @attr.s
+class DriveSheetImport(object):
+    ticket = attr.ib(type=str, default='')
+
+
+@to_json_decorator
+@attr.s
+class DriveSheetImportResult(object):
+    ticket = attr.ib(type=str, default='')
+    url = attr.ib(type=str, default='')
+    warning_code = attr.ib(type=int, default=0, metadata={'json': 'warningCode'})
+
+
+@to_json_decorator
+@attr.s
 class DriveInsertSheet(object):
     sheet_token = attr.ib(type=str, default='')
     sheet_id = attr.ib(type=str, default='')

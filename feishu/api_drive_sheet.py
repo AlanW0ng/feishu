@@ -8,7 +8,7 @@ from six.moves.urllib.parse import quote
 
 from feishu.dt_drive import (BatchSetDriveSheetStyleRequest, DriveInsertSheet, DriveSheetMergeType, DriveSheetMeta,
                              DriveSheetStyle, LockDriveSheetRequest, ReadDriveSheetRequest, UpdateDriveSheetResponse,
-                             WriteDriveSheetRequest, join_range)
+                             WriteDriveSheetRequest, join_range, DriveSheetImport, DriveSheetImportResult)
 from feishu.dt_help import make_datatype
 from feishu.helper import converter_enum
 
@@ -42,6 +42,57 @@ class APIDriveSheetMixin(object):
             if k != 'properties':
                 properties[k] = v
         return make_datatype(DriveSheetMeta, properties)
+
+    def import_file_to_drive_sheet(self, user_access_token, buffer, name, folder_token="") -> DriveSheetImport:
+        """
+        导入表格
+        Args:
+            user_access_token: user_access_token 或者 tenant_access_token
+            buffer: 文件路径或者是可读的文件对象
+            name: 文件名，带上文件拓展名
+            folder_token: 导入的文件夹token，默认导入到根目录下
+
+        Returns: DriveSheetImport
+
+        https://open.feishu.cn/document/ukTMukTMukTM/uATO2YjLwkjN24CM5YjN
+        """
+        f = None
+        if isinstance(buffer, str):
+            buffer = open(buffer, "rb")
+            bytes_data = buffer.read()
+            buffer.close()
+            f = list(bytearray(bytes_data))
+        elif isinstance(buffer, bytes):
+            f = list(bytearray(buffer))
+        elif isinstance(buffer, bytearray):
+            f = list(buffer)
+        elif isinstance(buffer, list):
+            f = buffer
+        else:
+            raise TypeError("unsupported file object")
+
+        url = self._gen_request_url("/open-apis/sheets/v2/import")
+        body = {
+            "file": f,
+            "name": name,
+            "folderToken": folder_token
+        }
+        res = self._post(url, body=body, auth_token=user_access_token)
+        return make_datatype(DriveSheetImport, res['data'])
+
+    def get_drive_sheet_import_result(self, user_access_token, ticket) -> DriveSheetImportResult:
+        """
+        获取导入表格的结果
+        Args:
+            user_access_token:  user_access_token 或者 tenant_access_token
+            ticket: 导入表格获取的ticket
+
+        Returns: DriveSheetImportResult
+
+        """
+        url = self._gen_request_url('/open-apis/sheets/v2/import/result?ticket={}'.format(ticket))
+        res = self._get(url, auth_token=user_access_token)
+        return make_datatype(DriveSheetImportResult, res['data'])
 
     def update_drive_sheet_properties(self, user_access_token, sheet_token, title):
         """更新表格属性

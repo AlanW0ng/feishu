@@ -3,60 +3,15 @@
 OpenLark: Lark Open Platform Python SDK  / 飞书开发平台 Python SDK
 
 
-## 安装
+## 使用
+- 子模块引用或者pip 安装压缩包  
+- python >= 3.5
 
-执行
+## Fork
+https://github.com/larksuite/feishu
 
-```bash
-TODO
-```
-
-## 优势
-
-- 完善的文档和网站
-- 类型标注，减少运行时 bug
-- docstring，减少理解难度
-- 实时监控 `open.feishu.cn` 文档库，保证同步更新接口
-- dataclass，不用猜测数据内部结构
-- 90% 单测覆盖率
-
-
-## TODO
-
-- 支持 windows(windows-latest)
-- 支持 pypy
-
-## 丰富的接口
-
-<details>
-  <summary>
-
-    基本实现了飞书开放平台上关于机器人、发消息、日历、审批、Doc等 100 余种接口
-
-    点击这里展开
-
-  </summary>
-
-</details>
-
-## 开放平台
-
-- [开放平台](https://open.feishu.cn/)
-
-
-## 更新日志
-
-点击查看 [更新日志](./CHANGELOG.md)
-
-
-## 开发
-
-如果想要参与开发，请参考文档 [开发指南](./DEVELOPMENT.md)
-
-- 开发约定
-  - 如果有返回 `has_more`，一般是作为第一个返回值
-  - 如果参数有 `page_size` 和 `page_token`，一般 `page_size` 在前
-  - `page_size` 默认值一般是 `20`
-  - 批量操作统一以 `batch` 开头
-
-使用 [black](https://github.com/psf/black) 格式化代码
+## 更新
+- 21.04.14  
+    - 新增create_drive_doc方法用于创建云文件
+    - 新增import_file_to_drive_sheet方法用于上传表格到云文档
+    - 新增import_file_to_drive_sheet方法用于获取上传表格的结果
